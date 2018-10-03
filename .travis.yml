@@ -19,25 +19,25 @@ script:
 # Make check versions of gcc, g++ and cmake
 - gcc -v && g++ -v && cmake --version
 
-- "MYHOME=`pwd`"
-- sudo mkdir /usr/src/googletest
-- sudo git clone "https://github.com/google/googletest.git" /usr/src/googletest
+#- "MYHOME=`pwd`"
+#- sudo mkdir /usr/src/googletest
+#- sudo git clone "https://github.com/google/googletest.git" /usr/src/googletest
 
-- cd /usr/src/googletest/googletest
-- sudo cmake CMakeLists.txt
-- sudo make
-- sudo cp *.a /usr/lib
-- sudo mkdir -p /usr/include/gtest
-- sudo cp  -rp  /usr/src/googletest/googletest/include/* /usr/include/
+#- cd /usr/src/googletest/googletest
+#- sudo cmake CMakeLists.txt
+#- sudo make
+#- sudo cp *.a /usr/lib
+#- sudo mkdir -p /usr/include/gtest
+#- sudo cp  -rp  /usr/src/googletest/googletest/include/* /usr/include/
 
-- cd /usr/src/googletest/googlemock
-- sudo cmake CMakeLists.txt
-- sudo make
-- sudo cp *.a /usr/lib
-- sudo mkdir -p /usr/include/gmock
-- sudo cp  -rp  /usr/src/googletest/googlemock/include/* /usr/include/
+#- cd /usr/src/googletest/googlemock
+#- sudo cmake CMakeLists.txt
+#- sudo make
+#- sudo cp *.a /usr/lib
+#- sudo mkdir -p /usr/include/gmock
+#- sudo cp  -rp  /usr/src/googletest/googlemock/include/* /usr/include/
 
-- cd "${MYHOME}"
+#- cd "${MYHOME}"
 - cmake .
 - cmake --build .
 #- cmake --build . --target test
