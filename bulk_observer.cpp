@@ -66,7 +66,7 @@ void ToFilePrint::printOut()
                 printOstream(ofs, cmd_pair.second);
                 ofs.close();
             }
-            catch (std::ofstream::failure e)
+            catch (std::ofstream::failure& e)
             {
                 lock_fs.unlock();
                 std::cerr << "Exception opening/reading/closing file: " << fName << std::endl;

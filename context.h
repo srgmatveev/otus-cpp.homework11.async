@@ -98,21 +98,31 @@ public:
       return (*iter).get();
     return nullptr;
   }
-  virtual ~ContextPool()
+
+  void stop()
   {
-    _consolePrint->stop();
-    _filePrint->stop();
+    if (_consolePrint)
+      _consolePrint->stop();
+    if (_filePrint)
+      _filePrint->stop();
+  }
+
+  ~ContextPool()
+  {
+    stop();
   }
 
 private:
   ContextPool(bool connect_only_console = false) : _consolePrint(ToConsolePrint::create(std::cout))
   {
     if (!connect_only_console)
-      _filePrint = ToFilePrint::create(std::thread::hardware_concurrency() ? std::thread::hardware_concurrency() : 1);
+      _filePrint = ToFilePrint::create(std::thread::hardware_concurrency()>1 ? std::thread::hardware_concurrency()-1 : 1);
     else
       _filePrint = nullptr;
   }
-
+  ContextPool(const ContextPool &) = delete;
+  ContextPool(ContextPool &&rhs) = delete;
+  ContextPool &operator=(const ContextPool &) = delete;
   std::vector<std::shared_ptr<Context>> _context;
   std::shared_ptr<ToConsolePrint> _consolePrint;
   std::shared_ptr<ToFilePrint> _filePrint;

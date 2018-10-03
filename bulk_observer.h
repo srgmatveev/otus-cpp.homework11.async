@@ -129,7 +129,7 @@ private:
   std::string thread_base_name{"file"};
 
 public:
-  ToFilePrint(std::size_t threads_count = 1) : Observer() { start(threads_count); }
+  ToFilePrint(std::size_t threads_count = 1) : Observer(),finished{false} { start(threads_count); }
   void update(BulkStorage &, std::size_t) override;
 
   static std::shared_ptr<ToFilePrint> create(std::size_t threads_count = 1)
