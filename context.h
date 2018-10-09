@@ -66,8 +66,8 @@ public:
 
   async::handle_t make_context(std::size_t bulkSize)
   {
-    std::lock_guard<std::mutex> lock_it(locker);
     auto context = std::make_shared<Context>(bulkSize, _consolePrint, _filePrint);
+    std::lock_guard<std::mutex> lock_it(locker);
     _context.emplace_back(context);
     return reinterpret_cast<async::handle_t>(context.get());
   }
@@ -82,16 +82,13 @@ public:
   }
   std::size_t get_context_size() const
   {
-    if (!&_context)
-      return 0;
+    std::lock_guard<std::mutex> lock_it(locker);
     return _context.size();
   }
 
   Context *find(async::handle_t &handle)
   {
     std::lock_guard<std::mutex> lock_it(locker);
-    if (!&_context)
-      return nullptr;
     auto iter = std::find_if(_context.cbegin(), _context.cend(),
                              [=](auto item) { return item.get() == handle; });
     if (iter != _context.cend())
@@ -116,7 +113,7 @@ private:
   ContextPool(bool connect_only_console = false) : _consolePrint(ToConsolePrint::create(std::cout))
   {
     if (!connect_only_console)
-      _filePrint = ToFilePrint::create(std::thread::hardware_concurrency()>1 ? std::thread::hardware_concurrency()-1 : 1);
+      _filePrint = ToFilePrint::create(std::thread::hardware_concurrency() > 1 ? std::thread::hardware_concurrency() - 1 : 1);
     else
       _filePrint = nullptr;
   }
@@ -126,5 +123,5 @@ private:
   std::vector<std::shared_ptr<Context>> _context;
   std::shared_ptr<ToConsolePrint> _consolePrint;
   std::shared_ptr<ToFilePrint> _filePrint;
-  std::mutex locker;
+  mutable std::mutex locker;
 };
