@@ -58,9 +58,9 @@ private:
 class ContextPool
 {
 public:
-  static ContextPool &Instance(bool connect_only_console = false)
+  static ContextPool &Instance()
   {
-    static ContextPool contextPool(connect_only_console);
+    static ContextPool contextPool;
     return contextPool;
   }
 
@@ -110,12 +110,9 @@ public:
   }
 
 private:
-  ContextPool(bool connect_only_console = false) : _consolePrint(ToConsolePrint::create(std::cout))
+  ContextPool() : _consolePrint(ToConsolePrint::create(std::cout))
   {
-    if (!connect_only_console)
-      _filePrint = ToFilePrint::create(std::thread::hardware_concurrency() > 1 ? std::thread::hardware_concurrency() - 1 : 1);
-    else
-      _filePrint = nullptr;
+    _filePrint = ToFilePrint::create(std::thread::hardware_concurrency() > 1 ? std::thread::hardware_concurrency() - 1 : 1);
   }
   ContextPool(const ContextPool &) = delete;
   ContextPool(ContextPool &&rhs) = delete;

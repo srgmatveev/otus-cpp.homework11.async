@@ -6,7 +6,7 @@
 #include <memory>
 #include <thread>
 
-static std::string mainThreadName ="main";
+static std::string mainThreadName = "main";
 struct Metric
 {
     std::thread::id thread_id;
@@ -29,6 +29,7 @@ class MetricsCount
     void blocksIncr(std::thread::id);
     void stringsIncr(std::thread::id);
     void printStatistic();
+
   private:
     /// Конструктор приложения по умолчанию
     MetricsCount() = default;
@@ -38,3 +39,5 @@ class MetricsCount
 
     std::map<std::thread::id, std::shared_ptr<Metric>> metrics;
 };
+
+void blocksCmdsIncr(std::thread::id, std::size_t);

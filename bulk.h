@@ -43,7 +43,6 @@ public:
 protected:
   void notify(BulkStorage &source, std::size_t id)
   {
-    // std::lock_guard<std::mutex> m_lock(lock_mutex);
     for (const auto &obs : observers)
     {
       if (auto ptr = obs.lock())
@@ -52,9 +51,7 @@ protected:
         ptr.reset();
       }
     }
-    MetricsCount::Instance().blocksIncr(std::this_thread::get_id());
-    MetricsCount::Instance().cmdsIncr(std::this_thread::get_id(),
-                                      source.get_commands(id).size());
+    blocksCmdsIncr(std::this_thread::get_id(), source.get_commands(id).size());
   }
 
 private:
