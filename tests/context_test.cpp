@@ -18,7 +18,7 @@ class TestContextCollection : public Test
     async::handle_t handle = 0;
     void SetUp() override
     {
-        ContextPool::Instance(true);
+        ContextPool::Instance();
     }
 };
 
